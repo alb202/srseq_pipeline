@@ -42,6 +42,15 @@ QC_filter="--qc-filter"
 # Samtools settings
 st_threads="2"
 
+# FeatureCount settings
+fc_type="exon"	# The feature of the GTF file to do the initial counting on
+fc_attribute="gene_id" # The column of the GTF file that should be used to summarize counts
+fc_level="" #use -f to count at the exon level, instead of the gene level
+fc_multimap="-M" # use -M to count multi-mapping reads, or "" to ignore them
+fc_threads="-T 2"
+fc_minfragmentlength="-d 20"
+fc_maxfragmentlength="-D 600"
+
 # Here are the functions
 
 trimmomatic_ () {
@@ -232,6 +241,22 @@ htseq_ () {
 	echo "Htseq-count complete"
 }
 
+featurecounts_ () {
+	echo "Running subread featureCounts ..."
+	featureCounts \
+	$fc_multimap \
+	-t $fc_type \
+	-g $fc_attribute \
+	$fc_level \
+	$fc_threads \
+	$fc_minfragmentlength \
+	$fc_maxfragmentlength \
+	-a $GTFGENES \
+	-o $OUTDIR$datasetID"/"$datasetID".featureCounts.txt" \
+	$OUTDIR$datasetID"/"$datasetID".bam"
+	echo "subread featureCounts complete"
+}
+
 bedtools_ () {	
 	echo "Running GenomeCov to create a bedgraph file ..."
 	bedtools genomecov -bg -ibam \
@@ -326,17 +351,18 @@ do
 	mkdir $OUTDIR$datasetID
 
 	## Call the functions
-	trimmomatic_
-	fastqc_
+#	trimmomatic_
+#	fastqc_
 #	bowtie2_
-	hisat2_
-	samtools_bam_
-	picard_
-	samtools_index_
-	htseq_
-	bedtools_
-	igv_
-	rseqc_
+#	hisat2_
+#	samtools_bam_
+#	picard_
+#	samtools_index_
+#	htseq_
+	featurecounts_
+#	bedtools_
+#	igv_
+#	rseqc_
 	echo "Analysis of" $datasetID "is complete"
 done
 
