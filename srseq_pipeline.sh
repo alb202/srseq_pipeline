@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ## Setup the working directory
-INDIR="/media/ab/RData/PRJNA369803_RNA-seq/"
+INDIR="/media/ab/RData/PRJNA344306/"
 OUTDIR=$INDIR
 
 ## Setup genome information
@@ -351,18 +351,18 @@ do
 	mkdir $OUTDIR$datasetID
 
 	## Call the functions
-#	trimmomatic_
-#	fastqc_
+	trimmomatic_
+	fastqc_
 #	bowtie2_
-#	hisat2_
-#	samtools_bam_
-#	picard_
-#	samtools_index_
-#	htseq_
+	hisat2_
+	samtools_bam_
+	picard_
+	samtools_index_
+	htseq_
 	featurecounts_
-#	bedtools_
-#	igv_
-#	rseqc_
+	bedtools_
+	igv_
+	rseqc_
 	echo "Analysis of" $datasetID "is complete"
 done
 
